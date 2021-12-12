@@ -8,7 +8,8 @@ library(sf)
 library(dplyr)
 library(lubridate)
 library(readr)
-library(tidyverse)
+library(tidyr)
 
 # analysis
 library(spdep)
+library(EpiEstim)
