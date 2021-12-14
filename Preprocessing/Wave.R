@@ -42,7 +42,14 @@ wave.weekly <- wave.daily %>%
   group_by(Id, Name, Bundesland, Kalenderwoche) %>%
   summarize(Inzidenz = first(sum(Fallzahl) / Einwohnerzahl * 100000), Inzidenz7 = mean(Inzidenz),  Fallzahl = sum(Fallzahl), RWert7 = mean(RWert7, na.rm = TRUE))
 
+
+wave.complete <- wave.weekly %>%
+  group_by(Id, Name, Bundesland) %>%
+  summarize(Inzidenz = mean(Inzidenz),  Fallzahl = sum(Fallzahl))
+
+
 wave.daily <- wave.daily %>% select(-Einwohnerzahl)
 
 st_write(wave.daily, dsn="./wave.daily.csv", delete_dsn=T)
 st_write(wave.weekly, dsn="./wave.weekly.csv", delete_dsn=T)
+st_write(wave.complete, dsn="./wave.complete.csv", delete_dsn=T)
