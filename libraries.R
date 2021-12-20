@@ -12,4 +12,5 @@ library(tidyr)
 
 # analysis
 library(spdep)
-library(EpiEstim)
+library(spacetime)
+#library(EpiEstim)
