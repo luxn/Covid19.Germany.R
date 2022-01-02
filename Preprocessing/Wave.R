@@ -40,7 +40,7 @@ wave.daily <- RKICOVID19 %>%
          )
 
 wave.weekly <- wave.daily %>%
-  mutate(Kalenderwoche = sprintf("%s/%s",isoyear(Meldedatum), isoweek(Meldedatum))) %>%
+  mutate(Kalenderwoche = sprintf("%s/%02d",isoyear(Meldedatum), isoweek(Meldedatum))) %>%
   group_by(Id, Name, Bundesland, Kalenderwoche) %>%
   summarize(Inzidenz = first(sum(Fallzahl) / Einwohnerzahl * 100000), Fallzahl = sum(Fallzahl), RWert7 = mean(RWert7, na.rm = TRUE))
 
