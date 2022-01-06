@@ -1,26 +1,24 @@
-RKICOVID19 <- read_csv(file.choose())
-Landkreise <- st_read("./Data/Landkreise.gpkg")
-Landkreise <- st_drop_geometry(Landkreise)
+RKICOVID19 <- read_csv(file.choose(), col_types = cols(Meldedatum = col_date(format = "%Y/%m/%d %H:%M:%S"),
+                                                       Refdatum = col_date(format = "%Y/%m/%d %H:%M:%S")))
+CalcLandkreise <- st_drop_geometry(st_read("./Data/Landkreise.gpkg"))
 
+#Wave <- c(0, '2020-02-03', '2022-01-02')
 #Wave <- c(1, '2020-02-03', '2020-05-31')
-Wave <- c(2, '2020-06-01', '2021-02-14')
+#Wave <- c(2, '2020-06-01', '2021-02-14')
 #Wave <- c(3, '2021-02-15', '2021-08-01')
-#Wave <- c(4, '2021-08-02', '2021-11-28')
-
-RKICOVID19$Meldedatum <- as.POSIXct(RKICOVID19$Meldedatum) # Formatieren des Datums von character zu datetimelocal wie in dfmissing, sonst join nicht möglich
+Wave <- c(4, '2021-08-02', '2021-11-28')
 
 ts <- seq(ymd(Wave[2]), ymd(Wave[3]), by="day")
 landkreisDF <- RKICOVID19 %>% select(IdLandkreis, Bundesland) %>% distinct(IdLandkreis, Bundesland)
 
 dfMissing = data.frame(Meldedatum=ts) %>%
-  mutate(Meldedatum = as.POSIXct(Meldedatum)) %>%
   full_join(landkreisDF, by = character())
 
 wave.daily <- RKICOVID19 %>%
     full_join(dfMissing) %>%
     mutate(AnzahlFall = ifelse(is.na(AnzahlFall), 0, AnzahlFall)) %>%
     mutate(IdLandkreis = ifelse(Bundesland == "Berlin", "11000", IdLandkreis)) %>%
-    merge(Landkreise, by.x='IdLandkreis', by.y='Schluesselnummer') %>%
+    merge(CalcLandkreise, by.x='IdLandkreis', by.y='Schluesselnummer') %>%
     select(
       Bundesland = Bundesland.x,
       IdLandkreis,
@@ -40,14 +38,19 @@ wave.daily <- RKICOVID19 %>%
          )
 
 wave.weekly <- wave.daily %>%
-  mutate(Kalenderwoche = sprintf("%s/%02d",isoyear(Meldedatum), isoweek(Meldedatum))) %>%
+  mutate(Kalenderwoche = floor_date(Meldedatum, unit="week")) %>%
   group_by(Id, Name, Bundesland, Kalenderwoche) %>%
-  summarize(Inzidenz = first(sum(Fallzahl) / Einwohnerzahl * 100000), Fallzahl = sum(Fallzahl), RWert7 = mean(RWert7, na.rm = TRUE))
+  summarize(Inzidenz = mean(Inzidenz),
+            Fallzahl = sum(Fallzahl),
+            RWert7 = mean(RWert7, na.rm = TRUE))
 
+wave.weekly[is.na(wave.weekly)] <- 0 # currently
 
 wave.complete <- wave.weekly %>%
   group_by(Id, Name, Bundesland) %>%
   summarize(Inzidenz = mean(Inzidenz),  Fallzahl = sum(Fallzahl), RWert7 = mean(RWert7, na.rm = TRUE))
+
+wave.complete[is.na(wave.complete)] <- 0 # currently
 
 
 wave.daily <- wave.daily %>% select(-Einwohnerzahl)

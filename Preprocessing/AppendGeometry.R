@@ -1,7 +1,8 @@
 Landkreise <- st_read("./Data/Landkreise.gpkg")
 
 append_landkreis_geometry <- function(df, merge.key = "Id") {
-  to.be.merged <- Landkreise %>% select(geom, Schluesselnummer)
+  to.be.merged <- Landkreise %>%
+    select(geom, Schluesselnummer, Einwohnerzahl, Name)
   return(df %>% merge(to.be.merged, by.x = merge.key, by.y = "Schluesselnummer") %>% st_as_sf)
 }
 

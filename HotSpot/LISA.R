@@ -1,10 +1,8 @@
 hotspot.lisa <- function(df, wavetype = "complete", wavefilter = FALSE) {
   if (wavetype == "weekly") {
-    wave <- df %>% filter(Kalenderwoche == wavefilter) # KW: '2021/43'
+    wave <- df %>% filter(Kalenderwoche == wavefilter) # KW: '2021-09-27'
   } else if (wavetype == "daily") {
-    from <- as.POSIXct(wavefilter)
-    to <- from + days(1)
-    wave <- df %>% filter(Meldedatum >= from & Meldedatum < to) # Datum: '2021-10-22'
+    wave <- df %>% filter(Meldedatum == wavefilter) # Datum: '2021-10-22'
   } else {
     wave <- df
   }
