@@ -7,7 +7,7 @@ bundesland.df <- df %>%
 
 bundesland.df$Bundesland <- as.factor(bundesland.df$Bundesland)
 
-ggplot(data=bundesland.df, aes(Kalenderwoche, Bundesland)) +
+p <- ggplot(data=bundesland.df, aes(Kalenderwoche, Bundesland)) +
   geom_tile(aes(fill=Inzidenz), colour="white") +
   scale_fill_gradientn(breaks=c(0, 10, 50, 100, 200, 500, 1000, as.integer(max(bundesland.df$Inzidenz))), trans="sqrt", colours=rev(c(
     '#730153', '#8c0165', '#8c0165','#ae017e','#ae017e',
@@ -20,3 +20,5 @@ ggplot(data=bundesland.df, aes(Kalenderwoche, Bundesland)) +
         axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=0.5),
         legend.key.height = unit(1.1, "cm")) + ggtitle("Verlauf der 7-Tage Inzidenz pro 100.000 Einwohner nach Bundesland")
 
+
+ggsave("./Images/inzidenzverlauf.bundesland.png", p, dpi="retina", width=9, height=3)
