@@ -1,13 +1,12 @@
 #plotting
-library(tmap)
-
+library(ggformula)
+library(ggrepel)
 # geospatial
 library(sf)
 
 # tidyverse
 library(tidyverse)
 library(lubridate)
-library(ggformula)
 
 # analysis
 library(spdep)
