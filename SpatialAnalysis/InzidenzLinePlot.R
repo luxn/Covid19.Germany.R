@@ -13,9 +13,10 @@ Phases <- list (
   c(5, '2021-06-07', '2021-08-15'), # own
   c(6, '2021-08-16', '2022-01-02')) # own
 
-p <- ggplot(germany.df, aes(x=Meldedatum, y=Inzidenz)) +
+plot.inz <- ggplot(germany.df, aes(x=Meldedatum, y=Inzidenz)) +
   geom_spline(size=1.25) +
-  scale_x_date(date_breaks = "months" , date_labels = "%b-%y") +
+  scale_x_date("", date_breaks = "months" , date_labels = "%b-%y") +
+  scale_y_continuous("7-Tage-Inzidenz") +
   theme(axis.line = element_line(colour = "black"),
         axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=0.5)) +
   annotate("text", x = date('2020-01-27') + 0, y = 500, label = "Phase 0") +
@@ -48,7 +49,8 @@ p <- ggplot(germany.df, aes(x=Meldedatum, y=Inzidenz)) +
              "red",
              "green",
              "red",
-             "green"))
+             "green")) +
+  ggtitle("Verlauf der 7-Tage Inzidenz pro 100.000 Einwohner auf Bundesebene")
 
-ggsave("./Images/inzidenzverlauf.phasen.png", p, dpi="retina", width=9, height=3)
+ggsave("./Images/inzidenzverlauf.phasen.png", plot.inz, dpi="retina", width=9, height=3)
 

@@ -1,6 +1,9 @@
 #plotting
 library(ggformula)
 library(ggrepel)
+library(patchwork)
+library(cowplot)
+
 # geospatial
 library(sf)
 
