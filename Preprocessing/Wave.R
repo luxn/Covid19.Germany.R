@@ -1,5 +1,6 @@
 #RKICOVID19 <- read_csv(file.choose(), col_types = cols(Meldedatum = col_date(format = "%Y/%m/%d %H:%M:%S"),
 #                                                       Refdatum = col_date(format = "%Y/%m/%d %H:%M:%S")))
+# https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/66876b81065340a4a48710b062319336/about
 RKICOVID19 <- read_csv(file.choose(), col_types = cols(Meldedatum = col_date(format = "%Y-%m-%d"),
                                                        Refdatum = col_date(format = "%Y-%m-%d")))
 
@@ -55,7 +56,7 @@ wave.daily <- RKICOVID19 %>%
          )
 
 wave.weekly <- wave.daily %>%
-  mutate(Kalenderwoche = floor_date(Meldedatum, unit="week")) %>%
+  mutate(Kalenderwoche = floor_date(Meldedatum, unit="week", week_start = 1)) %>%
   group_by(Id, Name, Bundesland, Kalenderwoche) %>%
   summarize(Inzidenz = mean(Inzidenz),
             Fallzahl = sum(Fallzahl))
