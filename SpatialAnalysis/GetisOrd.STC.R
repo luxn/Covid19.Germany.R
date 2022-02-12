@@ -18,8 +18,8 @@ weeks <- unique(date(df$Kalenderwoche))
 for (week in weeks) {
   week <- as.Date(week, origin=origin)
   week.df <- filter(df, Kalenderwoche == week) %>% arrange(Id)
-  nb <- dnearneigh(st_centroid(week.df), 0, 60000) # 60km
-  nb_lw <- nb2listw(nb, style = 'W')
+  NB <- poly2nb(week.df)
+  nb_lw <- nb2listw(include.self(NB), style = 'W')
   local_g <- localG(week.df$Inzidenz, nb_lw)
 
   column <- cut(as.matrix(local_g), c(-Inf, -2.576, -1.960, -1.645, 1.645, 1.960, 2.576, +Inf),
@@ -41,11 +41,15 @@ for (week in weeks) {
   #names(cube.df)[length(names(cube.df))] <- as.character(week)
 }
 
+week_labeller <- function(variable,value) {
+  return(sprintf("%s/2021", week(value)))
+}
+
 p <- ggplot(result.df) +
   geom_sf(aes(fill=class),
           lwd =0.25) +
   scale_fill_manual(values = rev(c('#b2182b','#ef8a62','#fddbc7','#f7f7f7','#d1e5f0','#67a9cf','#2166ac')), name= "Gi* values",) +
-  facet_wrap(vars(Kalenderwoche), ncol = 4) +
+  facet_wrap(vars(Kalenderwoche), ncol = 4, labeller=week_labeller) +
   theme(axis.line=element_blank(),axis.text.x=element_blank(),
         axis.text.y=element_blank(),axis.ticks=element_blank(),
         axis.title.x=element_blank(),
@@ -54,7 +58,7 @@ p <- ggplot(result.df) +
         panel.grid.minor=element_blank(),plot.background=element_blank())
   #ggtitle(sprintf("Gi* - Phase 6 - Week of %s", week))
 
-ggsave("./Images/plot3.pdf", p, dpi="retina", width=9, height=12)
+ggsave("./Images/plot3.pdf", p, dpi="retina", width=9, height=11)
 
 
 result.df$centroid <- st_centroid(result.df)
