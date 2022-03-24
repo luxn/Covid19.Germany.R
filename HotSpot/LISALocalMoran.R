@@ -19,7 +19,7 @@ hotspot.lisa <- function(df, wavetype = "complete", wavefilter = FALSE) {
   m.local <- local[,1] - mean(local[,1])
 
   # significance threshold
-  signif <- 0.1
+  signif <- 0.05
 
   # builds a data quadrant
   quadrant[m.inzidenz >0 & m.local>0] <- 4

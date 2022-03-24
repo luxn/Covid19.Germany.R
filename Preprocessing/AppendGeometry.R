@@ -1,5 +1,7 @@
 Landkreise <- st_read("./Data/Landkreise.gpkg")
 
+# Funktionen um Landkreise oder Bundesländer Geometrien ad-hoc hinzuzufügen wenn sie gebraucht werden
+
 append_landkreis_geometry <- function(df, merge.key = "Id") {
   to.be.merged <- Landkreise %>%
     select(geom, Schluesselnummer)

@@ -18,5 +18,6 @@ geary.c <- function(df, wavetype, wavefilter, bundesland=F) {
   nb <- poly2nb(wave, queen=T)
   lw <- nb2listw(nb, style="W")
 
+  # Geary's C measure of spatial autocorrelation
   geary.test(wave$Inzidenz, listw = lw)
 }

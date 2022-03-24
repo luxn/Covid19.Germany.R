@@ -1,4 +1,4 @@
-germany.df <- read_csv("./data/phase.all.daily.csv") %>%
+germany.df <- read_csv("./Data/phase.all.daily.csv") %>%
   group_by(Meldedatum) %>%
   summarise(Inzidenz = mean(Inzidenz)) %>%
   arrange(Meldedatum)

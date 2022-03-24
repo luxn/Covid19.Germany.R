@@ -5,6 +5,8 @@ source("./HotSpot/LISA.R")
 source("./SpatialAutocorrelation/Moran.R")
 #source("./Preprocessing/Wave.R")
 
+# Testumgebung, um zu schauen was so vorliegt
+
 wave.complete <- read_csv("./Data/wave0.complete.csv")
 wave1.complete <- read_csv("./Data/wave0.complete.csv")
 wave2.complete <- read_csv("./Data/wave0.complete.csv")
@@ -12,7 +14,7 @@ wave3.complete <- read_csv("./Data/wave0.complete.csv")
 wave4.complete <- read_csv("./Data/wave0.complete.csv")
 
 hotspot.lisa(wave.complete, "complete", "Wave (All)")
- hotspot.lisa(wave1.complete, "complete", "Wave1")
+hotspot.lisa(wave1.complete, "complete", "Wave1")
 hotspot.lisa(wave2.complete, "complete", "Wave2")
 hotspot.lisa(wave3.complete, "complete", "Wave3")
 hotspot.lisa(wave4.complete, "complete", "Wave4")

@@ -1,5 +1,7 @@
 # Reference https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Projekte_RKI/R-Wert-Erlaeuterung.pdf?__blob=publicationFile
 
+# Untersuchung mit R0 etwas anzufangen
+
 wave4 <- read_csv("./wave4daily.csv")
 waveR0 <- wave4 %>% head(119)
 
